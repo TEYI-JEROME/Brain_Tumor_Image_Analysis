@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Brain Tumor Image Analysis - Test</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <aside class="sidebar">
+            <div class="menu">
+                <h2>MENU</h2>
+                <ul>
+                    <li><a href="{{ url_for('home') }}" class="nav-link">Home</a></li>
+                    <li><a href="{{ url_for('test') }}" class="nav-link active">Take the Test</a></li>
+                </ul>
+            </div>
+        </aside>
+
+        <main>
+            <section id="test" class="page">
+                <h2>Brain Tumor Test</h2>
+                <p>Please upload an image to begin the analysis. Once the analysis is complete, you can view the results and advice.</p>
+
+                <form id="upload-form" enctype="multipart/form-data">
+                    <div class="form-group">
+                        <label>Select Model</label>
+                        <select name="model_type" id="model-select">
+                            <option value="pytorch">PyTorch (AlexNet)</option>
+                            <option value="tensorflow">TensorFlow (Custom CNN)</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Upload Image</label>
+                        <input type="file" id="image-upload" name="image" accept="image/*">
+                        <div id="image-preview" class="image-preview"></div>
+                    </div>
+
+                    <button type="submit" class="btn">Predict</button>
+                </form>
+
+                <div id="loading" class="hidden">
+                    <p>Analyzing your image... Results will be ready in a moment!</p>
+                </div>
+
+                <div id="results" class="hidden">
+                    <h3>Results</h3>
+                    <p><strong>Prediction:</strong> <span id="prediction"></span></p>
+                    <p><strong>Probabilities:</strong></p>
+                    <ul id="probabilities"></ul>
+                    <a href="#" class="btn">View Results and Advice</a>
+                    <h4>What this means:</h4>
+                    <p id="meaning"></p>
+                    <h4>About This Condition:</h4>
+                    <p id="condition"></p>
+                    <h4>Advice:</h4>
+                    <p id="advice"></p>
+                </div>
+
+                <div class="add-image">✚</div>
+            </section>
+        </main>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+    <script>
+        function setAdvice(prediction) {
+            const info = {
+                glioma: {
+                    meaning: "A glioma is a type of tumor that starts in the glial cells of the brain. It can range from low-grade (less aggressive) to high-grade (more aggressive).",
+                    condition: "Gliomas can impact brain function depending on their size and location. Some grow slowly, while others progress more rapidly.",
+                    advice: "If you experience persistent headaches, memory issues, or seizures, we recommend seeing a neurologist for a full evaluation."
+                },
+                meningioma: {
+                    meaning: "A meningioma is typically a benign tumor arising from the membranes that surround the brain and spinal cord.",
+                    condition: "Though usually non-cancerous, its growth can press on brain structures and cause symptoms depending on its location.",
+                    advice: "If you're experiencing frequent headaches, vision problems, or sensory changes, consider speaking with a healthcare provider."
+                },
+                pituitary: {
+                    meaning: "A pituitary tumor, often benign, forms in the pituitary gland which regulates vital hormones in the body.",
+                    condition: "These tumors can affect hormone levels and potentially vision due to their proximity to the optic nerves.",
+                    advice: "Please consult an endocrinologist if you notice unexplained fatigue, vision changes, or hormone-related symptoms."
+                },
+                notumor: {
+                    meaning: "No tumor was detected in the analyzed image.",
+                    condition: "This is reassuring, but it does not replace a professional medical evaluation.",
+                    advice: "If you have any ongoing concerns or symptoms, we encourage you to seek advice from a medical professional."
+                }
+            };
+            const disease = prediction.toLowerCase();
+            if (info[disease]) {
+                document.getElementById('meaning').innerText = info[disease].meaning;
+                document.getElementById('condition').innerText = info[disease].condition;
+                document.getElementById('advice').innerText = info[disease].advice;
+            }
+        }
+
+        document.getElementById('upload-form').addEventListener('submit', async function(event) {
+            event.preventDefault();
+            document.getElementById('loading').classList.remove('hidden');
+            document.getElementById('results').classList.add('hidden');
+
+            const formData = new FormData(this);
+            const response = await fetch('/predict', {
+                method: 'POST',
+                body: formData
+            });
+
+            const data = await response.json();
+            document.getElementById('loading').classList.add('hidden');
+
+            if (data.error) {
+                alert('Error: ' + data.error);
+            } else {
+                document.getElementById('prediction').textContent = data.prediction;
+                const probList = document.getElementById('probabilities');
+                probList.innerHTML = '';
+                for (const [label, value] of Object.entries(data.probabilities)) {
+                    const li = document.createElement('li');
+                    li.textContent = `${label}: ${value}`;
+                    probList.appendChild(li);
+                }
+                setAdvice(data.prediction);
+                document.getElementById('results').classList.remove('hidden');
+            }
+        });
+    </script>
+</body>
+</html>

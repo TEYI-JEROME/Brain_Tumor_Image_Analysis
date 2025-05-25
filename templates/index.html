@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Brain Tumor Image Analysis</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <aside class="sidebar">
+            <div class="menu">
+                <h2>MENU</h2>
+                <ul>
+                    <li><a href="#" class="nav-link" data-section="home">Home</a></li>
+                    <li><a href="#" class="nav-link" data-section="test">Take the Test</a></li>
+                </ul>
+            </div>
+        </aside>
+
+        <main>
+            <section id="home" class="page">
+                <h1>Welcome to Brain Tumor Image Analysis</h1>
+                <p>This tool is designed to assist you with preliminary analysis of brain images. Our features include:</p>
+                <ul>
+                    <li>Upload and analyze brain images.</li>
+                    <li>Provide an initial assessment of potential brain tumors.</li>
+                    <li>Offer guidance and advice based on the analysis.</li>
+                </ul>
+                <p><strong>Please use this tool as a starting point and consult a medical professional for a confirmed diagnosis.</strong></p>
+
+                <h2>Project Contributors</h2>
+                <div class="contributors">
+                    <div class="contributor">
+                        <h3>Dr. Jordan Felicien Masakuna</h3>
+                        <p>Instructor - Computer Vision Course, AIMS Senegal</p>
+                        <p>Dr. Masakuna is a Postdoctoral Researcher at the University of Sherbrooke, holding a PhD in Mathematical Sciences and Computer Science from Stellenbosch University (2020). He specializes in artificial intelligence, cybersecurity, network analysis, distributed robotics systems, and data fusion, with a focus on enhancing the reliability of deep learning models.</p>
+                        <a href="https://za.linkedin.com/in/jordan-f-masakuna-phd-194a68b4" target="_blank">LinkedIn Profile</a>
+                    </div>
+                    <div class="contributor">
+                        <h3>Mamadou Pathe LY</h3>
+                        <p>Supervisor</p>
+                        <p>Mamadou Pathe LY is a Data Scientist with experience in machine learning and data analysis, currently working as a tutor and researcher at AIMS Senegal. He is passionate about mentoring students in AI and data-driven projects.</p>
+                        <a href="https://www.linkedin.com/in/mamadou-pathe-ly-ba3791174/?originalSubdomain=sn" target="_blank">LinkedIn Profile</a>
+                    </div>
+                    <div class="contributor">
+                        <h3>TEYI Kodjo Jerome</h3>
+                        <p>Data Science Student, AIMS Senegal</p>
+                        <p>TEYI Kodjo Jerome is a Data Science student at AIMS Senegal, focused on applying AI and computer vision techniques to solve real-world problems, with a particular interest in medical imaging applications.</p>
+                        <img src="{{ url_for('static', filename='images/TEYI.jpg') }}" alt="TEYI Kodjo Jerome" class="contributor-image">
+                        <a href="https://www.linkedin.com/in/kodjo-jerôme-sedowo-teyi-068763264/" target="_blank">LinkedIn Profile</a>
+                    </div>
+                </div>
+                <a href="#" class="btn nav-link" data-section="test">Start the Test</a>
+            </section>
+
+            <section id="test" class="page hidden">
+                <h2>Brain Tumor Test</h2>
+                <p>Please upload an image to begin the analysis. Once the analysis is complete, you can view the results and advice.</p>
+
+                <form id="upload-form" enctype="multipart/form-data">
+                    <div class="form-group">
+                        <label>Select Model</label>
+                        <select name="model_type" id="model-select">
+                            <option value="pytorch">PyTorch (AlexNet)</option>
+                            <option value="tensorflow">TensorFlow (Custom CNN)</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Upload Image</label>
+                        <input type="file" id="image-upload" name="image" accept="image/*">
+                        <div id="image-preview" class="image-preview"></div>
+                    </div>
+
+                    <button type="submit" class="btn">Predict</button>
+                </form>
+
+                <div id="loading" class="hidden">
+                    <p>Analyzing your image... Results will be ready in a moment!</p>
+                </div>
+
+                <div id="results" class="hidden">
+                    <h3>Results</h3>
+                    <p><strong>Prediction:</strong> <span id="prediction"></span></p>
+                    <p><strong>Probabilities:</strong></p>
+                    <ul id="probabilities"></ul>
+                    <a href="#" class="btn">View Results and Advice</a>
+                    <h4>What this means:</h4>
+                    <p id="meaning"></p>
+                    <h4>About This Condition:</h4>
+                    <p id="condition"></p>
+                    <h4>Advice:</h4>
+                    <p id="advice"></p>
+                </div>
+
+                <div class="add-image">✚</div>
+            </section>
+        </main>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9455f004ed4f2192',t:'MTc0ODE4NTU5NS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
