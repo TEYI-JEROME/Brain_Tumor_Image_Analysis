@@ -1,0 +1,31 @@
+virtualenv aims_cv_2025
+
+
+aims_cv_2025\Scripts\activate
+
+source aims_cv_2025/bin/activate
+
+conda env create -f /mnt/data/environment.yml
+conda activate jerome.tensorflow
+
+export CUDA_VISIBLE_DEVICES=""
+
+pip install -r requirements.txt --upgrade
+
+python main.py --mode train  --epochs 1 --lr 0.002 --wd 0.002
+
+
+
+
+python main.py --epochs 15 --lr 0.001 --wd 0.0001 --mode train 
+
+Test Accuracy: 95.88%  |  Test Loss: 0.1582
+
+python main.py --model_type pytorch --epochs 50 --lr 0.001 --wd 0.0001 --cuda
+
+
+python main.py --model_type tensorflow --epochs 20 --lr 0.001 --wd 0.0001 --cuda
+
+python main.py --model_type tensorflow --epochs 50 --lr 0.001 --wd 0.0001
+
+Test Accuracy: 94.36% | Test Loss: 0.1580
