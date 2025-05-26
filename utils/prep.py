@@ -5,7 +5,7 @@ import tensorflow as tf
 
 
 def get_pytorch_data(batch_size=70):
-    # Transforms pour les données d'entraînement (avec augmentation)
+    
     train_transform = transforms.Compose([
         transforms.RandomHorizontalFlip(),
         transforms.RandomRotation(10),
@@ -15,7 +15,7 @@ def get_pytorch_data(batch_size=70):
         transforms.Normalize((0.5,), (0.5,))
     ])
 
-    # Transforms pour les données de test (sans augmentation)
+
     test_transform = transforms.Compose([
         transforms.Resize((224, 224)),
         transforms.Grayscale(num_output_channels=1),
